@@ -1,7 +1,7 @@
 import pygame
 import blocks
 BLOCK_WIDTH = 48
-BLOCK_HEIGHT = 64
+BLOCK_HEIGHT = 48
 
 
 # pygame 초기화
@@ -21,14 +21,26 @@ player_img = pygame.image.load("pictures/player.png")
 player_img = pygame.transform.scale(player_img, (50, 50))
 player_rect = player_img.get_rect()
 # 플레이어 위치 설정
-player_rect.centerx = (WINDOW_WIDTH//2)
-player_rect.bottom = (WINDOW_HEIGHT//2)
+player_rect.centerx = WINDOW_WIDTH//2
+player_rect.bottom = WINDOW_HEIGHT//2
 # 백그라운드 이미지 설정
 background_image = pygame.image.load("pictures/sky.jpg")
 # 백그라운드 이미지 크기 전체화면에 맞게 조정
 background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
 # 블록 리스트 생성
 block_list = []
+for i in range(3):
+    for j in range(3):
+        block = blocks.Block(
+            48 * 10 + i * BLOCK_WIDTH,
+            48 * 10 + j * BLOCK_HEIGHT,
+            BLOCK_WIDTH,
+            BLOCK_HEIGHT,
+            "pictures/grass_block.png",
+            order=2-j
+        )
+        block_list.append(block)
+
 
 # 게임이 동작하는 동안 이벤트
 x = 0
@@ -76,44 +88,42 @@ while running:
                 and block.rect.left >= grid_rect.right
             ]
 
-            block_x = grid_x
+            new_blk_x = grid_x
+            new_blk_y = grid_y
+            new_blk_order = 0
             if blocks_left:
                 left_block = max(blocks_left, key=lambda block: block.rect.right)
-                block_x = left_block.rect.right - 2
-            if blocks_right:
+                new_blk_x = left_block.rect.right
+                new_blk_order = left_block.order
+            elif blocks_right:
                 right_block = min(blocks_right, key=lambda block: block.rect.left)
-                block_x = right_block.rect.left - BLOCK_WIDTH + 2
-            block_y = grid_y
-            if blocks_above:
+                new_blk_x = right_block.rect.left - BLOCK_WIDTH
+                new_blk_order = right_block.order
+            elif blocks_above:
                 upper_block = max(blocks_above, key=lambda block: block.rect.bottom)
-                block_y = upper_block.rect.bottom - 18
+                new_blk_y = upper_block.rect.bottom
+                new_blk_order = upper_block.order - 1
             elif blocks_below:
                 lower_block = min(blocks_below, key=lambda block: block.rect.top)
-                block_y = lower_block.rect.top - BLOCK_HEIGHT + 18
+                new_blk_y = lower_block.rect.top - BLOCK_HEIGHT
+                new_blk_order = lower_block.order + 1
 
-            block_rect = pygame.Rect(grid_x, block_y, BLOCK_WIDTH, BLOCK_HEIGHT)
+            block_rect = pygame.Rect(new_blk_x, new_blk_y, BLOCK_WIDTH, BLOCK_HEIGHT)
 
-
+            # blocks_left, blocks_right, blocks_above, blocks_below 안에 블럭이 없으면 블럭을 만들지 않는다.
+            if not (blocks_left or blocks_right or blocks_above or blocks_below):
+                continue
             # 같은 격자 칸에 블록이 있을 때는 새 블록을 만들지 않는다.
             if not any(block.rect == block_rect for block in block_list):
-                gb = blocks.Block(
-                    block_x,
-                    block_y,
+                new_block = blocks.Block(
+                    new_blk_x,
+                    new_blk_y,
                     BLOCK_WIDTH,
                     BLOCK_HEIGHT,
                     "pictures/grass_block.png",
                 )
-                block_list.append(gb)
-                for block in block_list:
-                    # 블록이 겹치지 않으면 order를 조정하지 않음
-                    if block == gb or not block.rect.colliderect(gb.rect):
-                        continue
-                    # 놓으려는 블록 아래에 이미 블록 존재할 경우 
-                    if block.rect.centery > gb.rect.centery:
-                        gb.order = max(gb.order, block.order + 1)
-                    # 놓으려는 블록 위에 블록 이미 존재할 경우
-                    elif block.rect.centery < gb.rect.centery:
-                        gb.order = min(gb.order, block.order - 1)
+                new_block.order = new_blk_order
+                block_list.append(new_block)
                 block_list.sort(key=lambda block: (block.layer, block.order), reverse=True)
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # 겹친 블록 중 화면에서 가장 앞에 있는 블록 확인
@@ -128,8 +138,11 @@ while running:
                         
                     )
                     break
-        
-    # 키보드 입력 처리
+        # 키보드 i 누르면 블록 리스트의 원소 수 출력
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_i:
+            print(f"Number of blocks: {len(block_list)}")
+
+    # 플레이어 이동 키보드 입력 처리
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] and player_rect.top > 0:
         player_rect.y -= 5
