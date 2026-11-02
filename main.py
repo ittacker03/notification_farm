@@ -87,33 +87,61 @@ while running:
                 and block.rect.top < grid_rect.bottom
                 and block.rect.left >= grid_rect.right
             ]
-
-            new_blk_x = grid_x
-            new_blk_y = grid_y
-            new_blk_order = 0
-            if blocks_left:
-                left_block = max(blocks_left, key=lambda block: block.rect.right)
-                new_blk_x = left_block.rect.right
-                new_blk_order = left_block.order
-            elif blocks_right:
-                right_block = min(blocks_right, key=lambda block: block.rect.left)
-                new_blk_x = right_block.rect.left - BLOCK_WIDTH
-                new_blk_order = right_block.order
-            elif blocks_above:
-                upper_block = max(blocks_above, key=lambda block: block.rect.bottom)
-                new_blk_y = upper_block.rect.bottom
-                new_blk_order = upper_block.order - 1
-            elif blocks_below:
-                lower_block = min(blocks_below, key=lambda block: block.rect.top)
-                new_blk_y = lower_block.rect.top - BLOCK_HEIGHT
-                new_blk_order = lower_block.order + 1
-
-            block_rect = pygame.Rect(new_blk_x, new_blk_y, BLOCK_WIDTH, BLOCK_HEIGHT)
-
+            
             # blocks_left, blocks_right, blocks_above, blocks_below 안에 블럭이 없으면 블럭을 만들지 않는다.
             if not (blocks_left or blocks_right or blocks_above or blocks_below):
                 continue
+
+            left_block = None
+            right_block = None
+            upper_block = None
+            lower_block = None
+            
+            candidates = []
+
+            if blocks_left:
+                left_block = max(blocks_left, key=lambda block: block.rect.right)
+                distance = grid_rect.left - left_block.rect.right
+                candidates.append(("left", distance, left_block))
+
+            if blocks_right:
+                right_block = min(blocks_right, key=lambda block: block.rect.left)
+                distance = right_block.rect.left - grid_rect.right
+                candidates.append(("right", distance, right_block))
+
+            if blocks_above:
+                upper_block = max(blocks_above, key=lambda block: block.rect.bottom)
+                distance = grid_rect.top - upper_block.rect.bottom
+                candidates.append(("above", distance, upper_block))
+
+            if blocks_below:
+                lower_block = min(blocks_below, key=lambda block: block.rect.top)
+                distance = lower_block.rect.top - grid_rect.bottom
+                candidates.append(("below", distance, lower_block))
+
+            # 가장 가까운 블록과 방향을 함께 기억한다.
+            direction, _, nearest_block = min(candidates, key=lambda candidate: candidate[1])
+
+            new_blk_x = grid_x
+            new_blk_y = grid_y
+            new_blk_order = nearest_block.order
+
+            if direction == "left":
+                new_blk_x = nearest_block.rect.right
+
+            elif direction == "right":
+                new_blk_x = nearest_block.rect.left - BLOCK_WIDTH
+
+            elif direction == "above":
+                new_blk_y = nearest_block.rect.bottom
+                new_blk_order = nearest_block.order - 1
+
+            elif direction == "below":
+                new_blk_y = nearest_block.rect.top - BLOCK_HEIGHT
+                new_blk_order = nearest_block.order + 1
+            
             # 같은 격자 칸에 블록이 있을 때는 새 블록을 만들지 않는다.
+            block_rect = pygame.Rect(new_blk_x, new_blk_y, BLOCK_WIDTH, BLOCK_HEIGHT)
             if not any(block.rect == block_rect for block in block_list):
                 new_block = blocks.Block(
                     new_blk_x,
