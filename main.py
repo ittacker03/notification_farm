@@ -9,17 +9,17 @@ BLOCK_HEIGHT = 48
 pygame.init()
 # 창 크기 설정 (마우스로 크기 조절 가능)
 info = pygame.display.Info()
-WINDOW_WIDTH = info.current_w
-WINDOW_HEIGHT = info.current_h - 60
-display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
+SCREEN_WIDTH = info.current_w
+SCREEN_HEIGHT = info.current_h - 60
+display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 # 창 이름 설정
 pygame.display.set_caption("Notification Farm")
 # 창 tick 객체 생성
 clock = pygame.time.Clock()
 # 플레이어 설정
 player = player.Player(
-    WINDOW_WIDTH//2,
-    WINDOW_HEIGHT//2,
+    SCREEN_WIDTH//2,
+    SCREEN_HEIGHT//2,
     50,
     50,
     "pictures/player.png"
@@ -27,7 +27,7 @@ player = player.Player(
 # 백그라운드 이미지 설정
 background_image = pygame.image.load("pictures/sky.jpg")
 # 백그라운드 이미지 크기 전체화면에 맞게 조정
-background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 # 블록 매니저 생성
 block_manager = blocks.BlockManager()
 for i in range(3):
@@ -56,9 +56,9 @@ while running:
         elif event.type == pygame.VIDEORESIZE:
             # 창 크기 조절 이벤트 처리
             display = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            WINDOW_WIDTH, WINDOW_HEIGHT = display.get_size()
+            SCREEN_WIDTH, SCREEN_HEIGHT = display.get_size()
             # 백그라운드 이미지 화면크기에 맞게 조정
-            background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+            background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
         # 스페이스바를 누르면 플레이어 위치를 블록 크기의 격자에 맞춘 후, 가장 가까운 블록을 기준으로 새 블록을 생성
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             # 플레이어 위치를 블록 크기의 격자에 맞춘다.
@@ -183,9 +183,9 @@ while running:
         player.rect.y -= 5
     if keys[pygame.K_a] and player.rect.left > 0:
         player.rect.x -= 5
-    if keys[pygame.K_s] and player.rect.bottom < WINDOW_HEIGHT:
+    if keys[pygame.K_s] and player.rect.bottom < SCREEN_HEIGHT:
         player.rect.y += 5
-    if keys[pygame.K_d] and player.rect.right < WINDOW_WIDTH:
+    if keys[pygame.K_d] and player.rect.right < SCREEN_WIDTH:
         player.rect.x += 5
     # display에 백그라운드 이미지 그리기
     display.blit(background_image, (0, 0))
