@@ -13,6 +13,7 @@ class Block:
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+
 class BlockManager:
     def __init__(self):
         self.list = []

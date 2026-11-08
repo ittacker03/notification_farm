@@ -5,6 +5,8 @@ import window
 
 BLOCK_WIDTH = 48
 BLOCK_HEIGHT = 48
+WINDOW_WIDTH = 400
+WINDOW_HEIGHT = 320
 
 # pygame 초기화
 pygame.init()
@@ -47,9 +49,12 @@ cur_block = "pictures/grass_block.png"
 # 윈도우 매니저 생성
 window_manager = window.WindowManager()
 # 아이템 윈도우 생성
-item_window = window.Item_Window(100, 100, 400, 300)
+item_window = window.Item_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"))
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
+item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
+item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png"))
+
 
 # 게임이 동작하는 동안 이벤트
 x = 0
@@ -206,14 +211,15 @@ while running:
                         break
         # Event Type : MOUSEMOTION
         elif event.type == pygame.MOUSEMOTION:
-            # widnow : 좌클릭하고 드래그하면 윈도우 이동
+            # window : 좌클릭하고 드래그하면 윈도우 이동
             if event.buttons[0]:
                 for w in reversed(window_manager.windows):
                     if w.rect.collidepoint(event.pos):
                         for element in w.elements:
-                            element.x += event.rel[0]
-                            element.y += event.rel[1]
-                        break      
+                            for sub_element in element:
+                                sub_element.x += event.rel[0]
+                                sub_element.y += event.rel[1]
+                        break
 
     # 플레이어 이동 키보드 입력 처리
     keys = pygame.key.get_pressed()
