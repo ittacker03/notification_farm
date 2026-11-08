@@ -118,7 +118,7 @@ if __name__ == "__main__":
     window_manager = WindowManager()
     item_window = Item_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
     
-    for i in range(10):
+    for i in range(20):
         grass_block = blocks.Block(200, 200, 48, 48, "pictures/grass_block.png")
         stone_block = blocks.Block(200, 200, 48, 48, "pictures/stone_block.png")
         item_window.add_item(grass_block)
