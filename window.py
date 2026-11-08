@@ -39,7 +39,6 @@ class Item_Window(Window):
         self.elements.append(self.item_rects)
         # 창 크기에 맞게 아이템 위치 조정
     def adjust_item_positions(self):
-
         if not self.items:
             return
 
