@@ -6,8 +6,10 @@ import webbrowser
 
 BLOCK_WIDTH = 48
 BLOCK_HEIGHT = 48
-WINDOW_WIDTH = 400
-WINDOW_HEIGHT = 320
+DEF_WINDOW_WIDTH = 400
+DEF_WINDOW_HEIGHT = 320
+NOTI_WINDOW_WIDTH = 400
+NOTI_WINDOW_HEIGHT = 350
 
 # pygame 초기화
 pygame.init()
@@ -48,13 +50,13 @@ for i in range(3):
 # 윈도우 매니저 생성
 window_manager = window.WindowManager()
 # 아이템 윈도우, 공지 윈도우 생성
-item_window = window.Item_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
-notice_window = window.Notice_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
+item_window = window.Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
+stnotice_window = window.STnotice_Window(100, 100, NOTI_WINDOW_WIDTH, NOTI_WINDOW_HEIGHT)
 
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"))
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
-item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(notice_window)))
+item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)))
 
 cur_block = blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png")
 
@@ -179,7 +181,7 @@ while running:
                 window_manager.center_windows(SCREEN_WIDTH, SCREEN_HEIGHT)
             # window : n 누르면 공지 창 화면에 출력
             elif event.key == pygame.K_n:
-                window_manager.add_window(notice_window)
+                window_manager.add_window(stnotice_window)
         # Event Type : MOUSEBUTTONDOWN
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -213,13 +215,23 @@ while running:
                         break
                 # window : 클릭한 윈도우 안의 공지 클릭 처리
                 for w in reversed(window_manager.windows):
-                    if not isinstance(w, window.Notice_Window):
-                        continue
+                    if not isinstance(w, window.STnotice_Window):
+                        break
                     if w.rect.collidepoint(event.pos):
                         for notice, notice_rect in zip(w.notices, w.notice_rects):
                             if notice_rect.collidepoint(event.pos):
                                 webbrowser.open(notice['url'])
                                 break
+                        break
+                # window : 공지 윈도우의 버튼 클릭 처리
+                for w in reversed(window_manager.windows):
+                    if not isinstance(w, window.STnotice_Window):
+                        break
+                    if w.page_left_button.collidepoint(event.pos):
+                        w.page_left()
+                        break
+                    if w.page_right_button.collidepoint(event.pos):
+                        w.page_right()
                         break
         # Event Type : MOUSEMOTION
         elif event.type == pygame.MOUSEMOTION:

@@ -9,7 +9,7 @@ class Window:
         self.quit = pygame.Rect(x + width - 30, y, 30, 30)  # 종료 버튼 영역
         # 창 안에 텍스트 추가
         self.title = title
-        self.font = pygame.font.Font("font/malgun.ttf", 30)
+        self.font = pygame.font.Font("./font/NanumGothic.ttf", 30)
         self.title_surface = self.font.render(self.title, True, (0, 0, 0))
         self.title_rect = self.title_surface.get_rect()
         self.title_rect.topleft = (self.rect.x + 5, self.rect.y + 5)
@@ -77,30 +77,59 @@ class Item_Window(Window):
             surface.blit(item.image, item.rect)
 
 # web_crawler.py에서 가져온 공지사항 크롤러를 이용한 공지사항 창
-class Notice_Window(Window):
+class STnotice_Window(Window):
     def __init__(self, x, y, width, height):
-        super().__init__(x, y, width, height, title="Notice")
+        super().__init__(x, y, width, height, title="학사공지")
+        self.page = 1
+
+        self.font_size = 12
+        self.font = pygame.font.Font("./font/NanumGothic.ttf", self.font_size)
+
         self.notices = []
         self.notice_rects = []
+        self.page_left_button = pygame.Rect(self.rect.x + 10, self.rect.y + self.rect.height - 40, 30, 30)
+        self.page_right_button = pygame.Rect(self.page_left_button.x + self.page_left_button.width + 10, self.rect.y + self.rect.height - 40, 30, 30)
         self.elements.append(self.notice_rects)
+        self.elements.append([self.page_left_button, self.page_right_button])
+
         self.crawler = web_crawler.STnotice_Crawler()
         self.update_notices()
     def update_notices(self):
+        rightest_x = 0
+
         self.notices.clear()
         self.notice_rects.clear()
-        font = pygame.font.Font("font/malgun.ttf", 20)
         for notice in self.crawler.get_notices():
-            text_surface = font.render(notice['title'], True, (0, 0, 0))
+            text_surface = self.font.render(notice['title'], True, (0, 0, 0))
             text_rect = text_surface.get_rect()
-            text_rect.topleft = (self.rect.x + 10, self.rect.y + 50 + len(self.notices) * 30)
+            text_rect.topleft = (self.rect.x + 10, self.rect.y + 50 + len(self.notices) * self.font_size)
             self.notices.append(notice)
             self.notice_rects.append(text_rect)
+            rightest_x = max(rightest_x, text_rect.right + 10)
+
+        self.rect.width = rightest_x - self.rect.x
+        self.quit.x = self.rect.right - 30
+            
+    def set_page(self, page):
+        self.crawler.set_page(page)
+        self.update_notices()
+    def page_right(self):
+        self.page += 1
+        self.set_page(self.page)
+    def page_left(self):
+        if self.page > 1:
+            self.page -= 1
+            self.set_page(self.page)
     def draw(self, surface):
         super().draw(surface)
         for notice, text_rect in zip(self.notices, self.notice_rects):
-            # why text_surface is needed to be created here? because if it is created in update_notices, the text_surface will be created only once, and when the notice title changes, the text_surface will not change. So it needs to be created here to reflect the current notice title.
-            text_surface = pygame.font.Font("font/malgun.ttf", 20).render(notice['title'], True, (0, 0, 0))
+            text_surface = self.font.render(notice['title'], True, (0, 0, 0))
             surface.blit(text_surface, text_rect)
+        # 페이지 이동 버튼 그리기
+        pygame.draw.rect(surface, (200, 200, 200), self.page_left_button)
+        pygame.draw.rect(surface, (200, 200, 200), self.page_right_button)
+        pygame.draw.polygon(surface, (0, 0, 0), [(self.page_left_button.x + 20, self.page_left_button.y + 5), (self.page_left_button.x + 10, self.page_left_button.y + 15), (self.page_left_button.x + 20, self.page_left_button.y + 25)])
+        pygame.draw.polygon(surface, (0, 0, 0), [(self.page_right_button.x + 10, self.page_right_button.y + 5), (self.page_right_button.x + 20, self.page_right_button.y + 15), (self.page_right_button.x + 10, self.page_right_button.y + 25)])
 
 class WindowManager:
     def __init__(self):
