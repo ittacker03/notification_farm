@@ -12,7 +12,37 @@ class Block:
         self.layer = layer # 블록의 레이어를 나타내는 속성
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+    def copy(self):
+        new_block = Block(
+            self.rect.x,
+            self.rect.y,
+            self.rect.width,
+            self.rect.height,
+            self.image_path,
+            self.order,
+            self.layer
+        )
+        return new_block
 
+class Method_Block(Block):
+    def __init__(self, x, y, width, height, image, method, order=0, layer=0):
+        super().__init__(x, y, width, height, image, order, layer)
+        self.method = method
+    def execute_method(self):
+        if callable(self.method):
+            self.method()
+    def copy(self):
+        new_block = Method_Block(
+            self.rect.x,
+            self.rect.y,
+            self.rect.width,
+            self.rect.height,
+            self.image_path,
+            self.method,
+            self.order,
+            self.layer
+        )
+        return new_block
 
 class BlockManager:
     def __init__(self):

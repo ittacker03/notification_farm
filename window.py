@@ -1,5 +1,6 @@
 import pygame
 import blocks
+import web_crawler
 
 # 화면에 띄우는 창을 나타내는 클래스
 class Window:
@@ -75,29 +76,39 @@ class Item_Window(Window):
         for item in self.items:
             surface.blit(item.image, item.rect)
 
-# class Status_Window(Window):
-#     def __init__(self, x, y, width, height):
-#         super().__init__(x, y, width, height, title="Status Window")
-#         self.status_texts = []
-#     def add_status_text(self, text):
-#         font = pygame.font.Font("font/malgun.ttf", 20)
-#         text_surface = font.render(text, True, (0, 0, 0))
-#         text_rect = text_surface.get_rect()
-#         text_rect.topleft = (self.rect.x + 10, self.rect.y + 50 + len(self.status_texts) * 30)
-#         self.status_texts.append((text_surface, text_rect))
-#         self.elements.append(text_rect) # status_text의 rect를 elements에 추가
-#     def draw(self, surface):
-#         super().draw(surface)
-#         for text_surface, text_rect in self.status_texts:
-#             surface.blit(text_surface, text_rect)
+# web_crawler.py에서 가져온 공지사항 크롤러를 이용한 공지사항 창
+class Notice_Window(Window):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height, title="Notice")
+        self.notices = []
+        self.notice_rects = []
+        self.elements.append(self.notice_rects)
+        self.crawler = web_crawler.STnotice_Crawler()
+        self.update_notices()
+    def update_notices(self):
+        self.notices.clear()
+        self.notice_rects.clear()
+        font = pygame.font.Font("font/malgun.ttf", 20)
+        for notice in self.crawler.get_notices():
+            text_surface = font.render(notice['title'], True, (0, 0, 0))
+            text_rect = text_surface.get_rect()
+            text_rect.topleft = (self.rect.x + 10, self.rect.y + 50 + len(self.notices) * 30)
+            self.notices.append(notice)
+            self.notice_rects.append(text_rect)
+    def draw(self, surface):
+        super().draw(surface)
+        for notice, text_rect in zip(self.notices, self.notice_rects):
+            # why text_surface is needed to be created here? because if it is created in update_notices, the text_surface will be created only once, and when the notice title changes, the text_surface will not change. So it needs to be created here to reflect the current notice title.
+            text_surface = pygame.font.Font("font/malgun.ttf", 20).render(notice['title'], True, (0, 0, 0))
+            surface.blit(text_surface, text_rect)
 
 class WindowManager:
     def __init__(self):
         self.windows = []
     def add_window(self, window):
-        # window 안에 Item_Widnow 객체가 이미 존재하면 Item_Widnow 객체는 추가 안함
+        # window 안에 클래스가 똑같은 객체가 이미 존재하면 그 객체는 추가 안함
         for existing_window in self.windows:
-            if isinstance(existing_window, Item_Window) and isinstance(window, Item_Window):
+            if isinstance(existing_window, type(window)):
                 return
         self.windows.append(window)
     def remove_window(self, window):

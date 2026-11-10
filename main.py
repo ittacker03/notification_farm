@@ -2,6 +2,7 @@ import pygame
 import blocks
 import player
 import window
+import webbrowser
 
 BLOCK_WIDTH = 48
 BLOCK_HEIGHT = 48
@@ -44,16 +45,18 @@ for i in range(3):
             order=2-j
         )
         block_manager.list.append(block)
-# 현재 선택된 블럭
-cur_block = "pictures/grass_block.png"
 # 윈도우 매니저 생성
 window_manager = window.WindowManager()
-# 아이템 윈도우 생성
+# 아이템 윈도우, 공지 윈도우 생성
 item_window = window.Item_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
+notice_window = window.Notice_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
+
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"))
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
-item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png"))
+item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(notice_window)))
+
+cur_block = blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png")
 
 
 # 게임이 동작하는 동안 이벤트
@@ -158,35 +161,33 @@ while running:
                 # 같은 격자 칸에 블록이 있을 때는 새 블록을 만들지 않는다. and 플레이어 격자 칸과 새 블록 격자가 겹칠 때만 새 블록을 만든다.
                 block_rect = pygame.Rect(new_blk_x, new_blk_y, BLOCK_WIDTH, BLOCK_HEIGHT)
                 if not any(block.rect == block_rect for block in block_manager.list) and grid_rect.colliderect(block_rect):
-                    new_block = blocks.Block(
-                        new_blk_x,
-                        new_blk_y,
-                        BLOCK_WIDTH,
-                        BLOCK_HEIGHT,
-                        cur_block,
-                        order=new_blk_order
-                    )
+                    new_block = cur_block.copy()
+                    new_block.rect.x = new_blk_x
+                    new_block.rect.y = new_blk_y
+                    new_block.order = new_blk_order
+
                     block_manager.add_block(new_block)
                     block_manager.sort_blocks()
             # block : i 누르면 블록 개수 출력
             elif event.key == pygame.K_i:
                 print(f"Number of blocks: {len(block_manager.list)}")
-            # window : 
+            # window : b 누르면 아이템 창 화면에 출력
             elif event.key == pygame.K_b:
                 window_manager.add_window(item_window)
+            # window : m 누르면 창 모두 화면 중앙에 위치
+            elif event.key == pygame.K_m:
+                window_manager.center_windows(SCREEN_WIDTH, SCREEN_HEIGHT)
+            # window : n 누르면 공지 창 화면에 출력
+            elif event.key == pygame.K_n:
+                window_manager.add_window(notice_window)
         # Event Type : MOUSEBUTTONDOWN
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                # blocks : 클릭한 블록의 위치, 크기, 이미지 크기, 레이어, 오더 출력
+                # blocks : 블록 클릭 이벤트 처리
                 for block in block_manager.list:
                     if block.rect.collidepoint(event.pos):
-                        print(
-                            f"Block at ({block.rect.x}, {block.rect.y}) - "
-                            f"Size: ({block.rect.width}, {block.rect.height}) - "
-                            # 블럭의 이미지 크기 출력
-                            f"Image Size: {block.image.get_size()} - "
-                            f"Layer: {block.layer}, Order: {block.order}"
-                        )
+                        if isinstance(block, blocks.Method_Block):
+                            block.execute_method()
                         break
                 # window : 클릭한 윈도우를 가장 위로 올리기
                 for w in reversed(window_manager.windows):
@@ -206,7 +207,18 @@ while running:
                     if w.rect.collidepoint(event.pos):
                         for item in w.items:
                             if item.rect.collidepoint(event.pos):
-                                cur_block = item.image_path
+                                # 객체를 복사하기
+                                cur_block = item.copy()
+                                break
+                        break
+                # window : 클릭한 윈도우 안의 공지 클릭 처리
+                for w in reversed(window_manager.windows):
+                    if not isinstance(w, window.Notice_Window):
+                        continue
+                    if w.rect.collidepoint(event.pos):
+                        for notice, notice_rect in zip(w.notices, w.notice_rects):
+                            if notice_rect.collidepoint(event.pos):
+                                webbrowser.open(notice['url'])
                                 break
                         break
         # Event Type : MOUSEMOTION

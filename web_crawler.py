@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+# unused class
 class Web_Crawler:
     def __init__(self, start_url):
         self.start_url = start_url
@@ -14,8 +15,8 @@ class Web_Crawler:
         self.soup = BeautifulSoup(response.text, "html.parser")
 
 class STnotice_Crawler(Web_Crawler):
-    def __init__(self, start_url = 'https://www.seoultech.ac.kr/service/info/matters/?allboard=true&bidx=6112&bnum=6112&page=1&size=12'):
-        super().__init__(start_url)
+    def __init__(self):
+        super().__init__(start_url = 'https://www.seoultech.ac.kr/service/info/matters/?allboard=true&bidx=6112&bnum=6112&page=1&size=12')
         self.page = 1
         self.notice_list = []
         self.extract_notices()
@@ -47,25 +48,3 @@ class STnotice_Crawler(Web_Crawler):
         self.extract_notices()
     def get_notices(self):
         return self.notice_list
-    
-if __name__ == "__main__":
-    crawler = STnotice_Crawler()
-    notices = crawler.get_notices()
-
-    page = 1
-    while page != 0:
-        page = int(input("페이지 번호를 입력하세요 (종료하려면 0 입력): "))
-        if page == 0:
-            break
-        crawler.set_page(page)
-        notices = crawler.get_notices() 
-
-        for notice in notices:
-            print('====================================')
-            print(f'번호: {notice['num']}')
-            print(f'제목: {notice['title']}')
-            print(f'URL: {notice['url']}')
-            print(f'작성자: {notice['writer']}')
-            print(f'날짜: {notice['date']}')
-            print(f'조회수: {notice['views']}')
-            print('====================================')
