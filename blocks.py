@@ -1,4 +1,6 @@
 import pygame
+import window
+import json
 
 class Block:
     def __init__(self, x, y, width, height, image, order=0, layer=0):
@@ -44,6 +46,7 @@ class Method_Block(Block):
         )
         return new_block
 
+
 class BlockManager:
     def __init__(self):
         self.list = []
@@ -57,3 +60,55 @@ class BlockManager:
     def draw_blocks(self, surface):
         for block in self.list:
             block.draw(surface)
+
+def save_blocks(block_manager, filename):
+    data = {"blocks": []}
+
+    for block in block_manager.list:
+        block_data = {
+            "type": type(block).__name__,
+            "x": block.rect.x,
+            "y": block.rect.y,
+            "width": block.rect.width,
+            "height": block.rect.height,
+            "image_path": block.image_path,
+            "order": block.order,
+            "layer": block.layer
+        }
+        data["blocks"].append(block_data)
+
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+def load_blocks(filename, window_manager, stnotice_window):
+    with open(filename, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    block_manager = BlockManager()
+
+    for block_data in data["blocks"]:
+        if block_data["type"] == "Block":
+            block = Block(
+                block_data["x"],
+                block_data["y"],
+                block_data["width"],
+                block_data["height"],
+                block_data["image_path"],
+                block_data["order"],
+                block_data["layer"]
+            )
+        elif block_data["type"] == "Method_Block":
+            if block_data["image_path"] == "pictures/noti_block.png":
+                block = Method_Block(
+                    block_data["x"],
+                    block_data["y"],
+                    block_data["width"],
+                    block_data["height"],
+                    block_data["image_path"],
+                    lambda: window_manager.add_window(stnotice_window),
+                    block_data["order"],
+                    block_data["layer"]
+                )
+        block_manager.add_block(block)
+        
+    return block_manager

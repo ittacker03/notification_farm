@@ -82,7 +82,7 @@ class STnotice_Window(Window):
         super().__init__(x, y, width, height, title="학사공지")
         self.page = 1
 
-        self.font_size = 12
+        self.font_size = 14
         self.font = pygame.font.Font("./font/NanumGothic.ttf", self.font_size)
 
         self.notices = []
@@ -102,7 +102,7 @@ class STnotice_Window(Window):
         for notice in self.crawler.get_notices():
             text_surface = self.font.render(notice['title'], True, (0, 0, 0))
             text_rect = text_surface.get_rect()
-            text_rect.topleft = (self.rect.x + 10, self.rect.y + 50 + len(self.notices) * self.font_size)
+            text_rect.topleft = (self.rect.x + 10, self.rect.y + 50 + len(self.notices) * (self.font_size + 1))
             self.notices.append(notice)
             self.notice_rects.append(text_rect)
             rightest_x = max(rightest_x, text_rect.right + 10)
@@ -122,9 +122,18 @@ class STnotice_Window(Window):
             self.set_page(self.page)
     def draw(self, surface):
         super().draw(surface)
+        # 공지사항 리스트 그리기
         for notice, text_rect in zip(self.notices, self.notice_rects):
             text_surface = self.font.render(notice['title'], True, (0, 0, 0))
             surface.blit(text_surface, text_rect)
+        # 마우스 오버 시 공지사항 강조 표시
+        mouse_pos = pygame.mouse.get_pos()
+        for notice, text_rect in zip(self.notices, self.notice_rects):
+            if text_rect.collidepoint(mouse_pos):
+                text_surface = self.font.render(notice['title'], True, (0, 0, 0))
+                pygame.draw.rect(surface, (200, 200, 200), text_rect)
+                surface.blit(text_surface, text_rect)
+                break
         # 페이지 이동 버튼 그리기
         pygame.draw.rect(surface, (200, 200, 200), self.page_left_button)
         pygame.draw.rect(surface, (200, 200, 200), self.page_right_button)
