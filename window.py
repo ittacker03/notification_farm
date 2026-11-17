@@ -33,8 +33,8 @@ class Window:
         surface.blit(self.title_surface, self.title_rect)
 
 class Item_Window(Window):
-    def __init__(self, x, y, width, height):
-        super().__init__(x, y, width, height, title="아이템")
+    def __init__(self, x, y, width, height, title="아이템"):
+        super().__init__(x, y, width, height, title)
         self.items = []
         self.item_rects = []
         self.elements.append(self.item_rects)
@@ -126,13 +126,18 @@ class Item_Window(Window):
 
     def add_item(self, item):
         self.items.append(item)
-        self.item_rects.append(item.rect)
         self.adjust_item_positions() # 아이템 위치 조정
 
     def remove_item(self, item):
-        if item in self.items:
-            self.items.remove(item)
-            self.item_rects.remove(item.rect)
+        if item is None:
+            return
+        item_kind = []
+        for it in self.items:
+            if it.image_path == item.image_path:
+                item_kind.append(it)
+        if len(item_kind) > 0:
+            rm_item = item_kind[len(item_kind) - 1]
+            self.items.remove(rm_item)
             self.adjust_item_positions() # 아이템 위치 조정
 
     def draw(self, surface):
@@ -149,8 +154,9 @@ class Item_Window(Window):
         old_clip = surface.get_clip()
         surface.set_clip(content_rect.clip(old_clip))
 
-        for item, x, y in self.pages[self.cur_page - 1]:
-            surface.blit(item.image, item.rect)
+        if self.pages:
+            for item, x, y in self.pages[self.cur_page - 1]:
+                surface.blit(item.image, item.rect)
 
         surface.set_clip(old_clip)
 
@@ -160,15 +166,37 @@ class Item_Window(Window):
         pygame.draw.polygon(surface, (0, 0, 0), [(self.page_left_button.x + 20, self.page_left_button.y + 5), (self.page_left_button.x + 10, self.page_left_button.y + 15), (self.page_left_button.x + 20, self.page_left_button.y + 25)])
         pygame.draw.polygon(surface, (0, 0, 0), [(self.page_right_button.x + 10, self.page_right_button.y + 5), (self.page_right_button.x + 20, self.page_right_button.y + 15), (self.page_right_button.x + 10, self.page_right_button.y + 25)])
 
-# class Shop_Window(Item_Window):
-#     def __init__(self, x, y, width, height):
-#         super().__init__(x, y, width, height)
-#         self.title = "상점"
-#         self.title_surface = self.font.render(self.title, True, (0, 0, 0))
-#         self.title_rect = self.title_surface.get_rect()
-#         self.title_rect.topleft = (self.rect.x + 5, self.rect.y + 5)
+class User_Item_Window(Item_Window):
+    def __init__(self, x, y, width, height, title = "사용자 아이템"):
+        super().__init__(x, y, width, height, title)
+        self.items_nums = {}
+    # 아이템의 image_path를 받아서 해당 아이템이 이미 존재하면 개수만 증가, 없으면 새로 추가
+    def add_item(self, item):
+        if item.image_path in self.items_nums:
+            self.items_nums[item.image_path] += 1
+        else:
+            self.items_nums[item.image_path] = 1
+            super().add_item(item)
+        print(self.items_nums)
+    def remove_item(self, item):
+        if item.image_path in self.items_nums:
+            self.items_nums[item.image_path] -= 1
+            if self.items_nums[item.image_path] <= 0:
+                del self.items_nums[item.image_path]
+                super().remove_item(item)
+                return "removed"
+        print(self.items_nums)
+    def draw(self, surface):
+        super().draw(surface)
+        for item in self.items:
+            count = self.items_nums.get(item.image_path, 0)
+            if count > 1:
+                font = pygame.font.Font("./font/NanumGothic.ttf", 20)
+                text_surface = font.render(str(count), True, (0, 0, 0))
+                text_rect = text_surface.get_rect()
+                text_rect.bottomright = item.rect.bottomright
+                surface.blit(text_surface, text_rect)
 
-# web_crawler.py에서 가져온 공지사항 크롤러를 이용한 공지사항 창
 class STnotice_Window(Window):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height, title="학사공지")
@@ -238,7 +266,7 @@ class WindowManager:
     def add_window(self, window):
         # window 안에 클래스가 똑같은 객체가 이미 존재하면 그 객체는 추가 안함
         for existing_window in self.windows:
-            if isinstance(existing_window, type(window)):
+            if window.__class__ == existing_window.__class__:
                 return
         self.windows.append(window)
     def remove_window(self, window):

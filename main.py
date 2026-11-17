@@ -35,21 +35,18 @@ background_image = pygame.image.load("pictures/sky.jpg")
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 # 윈도우 매니저 생성
 window_manager = window.WindowManager()
-# 아이템 윈도우, 공지 윈도우 생성
+# 각 윈도우 생성
 item_window = window.Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
+useritem_window = window.User_Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
 stnotice_window = window.STnotice_Window(100, 100, NOTI_WINDOW_WIDTH, NOTI_WINDOW_HEIGHT)
 
-item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"))
-item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
-item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
-item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)))
-for i in range(20):
-    item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
-
+# item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"))
+# item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
+# item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
+# item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)))
 # 블록 매니저 생성
 block_manager = blocks.load_blocks("block_data.json", window_manager, stnotice_window)
-
-cur_block = blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png")
+cur_block = None
 
 
 # 게임이 동작하는 동안 이벤트
@@ -72,6 +69,8 @@ while running:
         elif event.type == pygame.KEYDOWN:
             # block : 스페이스바를 누르면 플레이어 위치를 블록 크기의 격자에 맞춘 후, 가장 가까운 블록을 기준으로 새 블록을 생성
             if event.key == pygame.K_SPACE:
+                if cur_block is None:
+                    continue
                 # 플레이어 위치를 블록 크기의 격자에 맞춘다.
                 grid_x = round(p1.rect.x / BLOCK_WIDTH) * BLOCK_WIDTH
                 grid_y = round(p1.rect.y / BLOCK_HEIGHT) * BLOCK_HEIGHT
@@ -163,24 +162,26 @@ while running:
 
                     block_manager.add_block(new_block)
                     block_manager.sort_blocks()
-            # block : i 누르면 블록 개수 출력
-            elif event.key == pygame.K_i:
-                print(f"Number of blocks: {len(block_manager.list)}")
+
+                    block_state = useritem_window.remove_item(cur_block)
+                    if block_state == "removed":
+                        print("아이템 창에서 아이템 제거됨")
+                        cur_block = None
             # block : r 누르면 플레이어 위치에 있는 블록 제거
             elif event.key == pygame.K_r:
                 for block in block_manager.list:
                     if block.rect.colliderect(p1.rect):
                         block_manager.remove_block(block)
                         break
-            # window : b 누르면 아이템 창 화면에 출력
-            elif event.key == pygame.K_b:
-                window_manager.add_window(item_window)
+            # window : i 누르면 사용자 아이템 창 화면에 출력
+            elif event.key == pygame.K_i:
+                window_manager.add_window(useritem_window)
+            # window : t 누르면 useritem 창에 wood block 추가
+            elif event.key == pygame.K_t:
+                useritem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
             # window : m 누르면 창 모두 화면 중앙에 위치
             elif event.key == pygame.K_m:
                 window_manager.center_windows(SCREEN_WIDTH, SCREEN_HEIGHT)
-            # window : n 누르면 공지 창 화면에 출력
-            elif event.key == pygame.K_n:
-                window_manager.add_window(stnotice_window)
         # Event Type : MOUSEBUTTONDOWN
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
