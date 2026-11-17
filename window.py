@@ -38,43 +38,135 @@ class Item_Window(Window):
         self.items = []
         self.item_rects = []
         self.elements.append(self.item_rects)
-        # 창 크기에 맞게 아이템 위치 조정
+
+        self.pages = []
+        self.cur_page = 1
+
+        # 페이지 변경 버튼
+        self.page_left_button = pygame.Rect(self.rect.x + 10, self.rect.y + self.rect.height - 40, 30, 30)
+        self.page_right_button = pygame.Rect(self.page_left_button.x + self.page_left_button.width + 10, self.rect.y + self.rect.height - 40, 30, 30)
+        self.elements.append([self.page_left_button, self.page_right_button])
+    # 창 크기에 맞게 아이템 위치 조정
     def adjust_item_positions(self):
+        self.pages = []
+
         if not self.items:
+            self.cur_page = 1
+            self.pages.append([])
             return
 
         left_space = 30
         top_space = 50
-        x = self.rect.x + left_space
-        y = self.rect.y + top_space
-        row_height = 0
+        right_space = 10
+        bottom_space = 20
 
+        start_x = self.rect.x + left_space
+        start_y = self.rect.y + top_space
+
+        max_x = self.rect.right - right_space
+        max_y = self.rect.bottom - bottom_space
+
+        # 아이템 행 단위 배치
+        rows = []
+        cur_row = []
+        x = start_x
+        row_height = 0
         for item in self.items:
             item_width, item_height = item.image.get_size()
-
             # 아이템이 창의 오른쪽 경계를 넘어가면 다음 줄로 이동
-            if x != self.rect.x + left_space and x + item_width > self.rect.right - 10:
-                x = self.rect.x + left_space
-                y += row_height + 20
-                # 왜 row_height = 0을 여기서 해주지 않으면 row_height가 계속 누적되어서 아이템이 겹쳐서 나오는 문제가 발생함
+            if cur_row and x + item_width > max_x:
+                rows.append((cur_row, row_height))
+                cur_row = []
+                x = start_x
                 row_height = 0
 
-            item.rect.topleft = (x, y)
+            cur_row.append((item, x))
             x += item_width + 10
             row_height = max(row_height, item_height)
+        if cur_row:
+            rows.append((cur_row, row_height))
+        # 페이지 분리
+        page = []
+        y = start_y
+        for row, height in rows:
+            if page and y + height > max_y:
+                self.pages.append(page)
+                page = []
+                y = start_y
+            for item, item_x in row:
+                page.append((item, item_x, y))
+            y += height + 20
+        if page:
+            self.pages.append(page)
+
+        # 페이지 범위 보정
+        if self.cur_page > len(self.pages):
+            self.cur_page = len(self.pages)
+        # 현재 페이지의 아이템 위치 갱신
+        self.update_cur_page()
+        
+    def update_cur_page(self):
+        self.item_rects.clear()
+
+        if not self.pages:
+            return
+        for item, x, y in self.pages[self.cur_page - 1]:
+            item.rect.topleft = (x, y)
+            self.item_rects.append(item.rect)
+
+    def next_page(self):
+        if self.cur_page < len(self.pages):
+            self.cur_page += 1
+            self.adjust_item_positions() # 아이템 위치 조정
+
+    def prev_page(self):
+        if self.cur_page > 1:
+            self.cur_page -= 1
+            self.adjust_item_positions() # 아이템 위치 조정
+
     def add_item(self, item):
         self.items.append(item)
         self.item_rects.append(item.rect)
         self.adjust_item_positions() # 아이템 위치 조정
+
     def remove_item(self, item):
         if item in self.items:
             self.items.remove(item)
             self.item_rects.remove(item.rect)
             self.adjust_item_positions() # 아이템 위치 조정
+
     def draw(self, surface):
         super().draw(surface)
-        for item in self.items:
+
+        # 아이템이 그려질 수 있는 영역 제한
+        content_rect = pygame.Rect(
+            self.rect.x + 10,
+            self.rect.y + 40,
+            self.rect.width - 20,
+            self.rect.height - 50
+        )
+
+        old_clip = surface.get_clip()
+        surface.set_clip(content_rect.clip(old_clip))
+
+        for item, x, y in self.pages[self.cur_page - 1]:
             surface.blit(item.image, item.rect)
+
+        surface.set_clip(old_clip)
+
+        # 페이지 이동 버튼 그리기
+        pygame.draw.rect(surface, (200, 200, 200), self.page_left_button)
+        pygame.draw.rect(surface, (200, 200, 200), self.page_right_button)
+        pygame.draw.polygon(surface, (0, 0, 0), [(self.page_left_button.x + 20, self.page_left_button.y + 5), (self.page_left_button.x + 10, self.page_left_button.y + 15), (self.page_left_button.x + 20, self.page_left_button.y + 25)])
+        pygame.draw.polygon(surface, (0, 0, 0), [(self.page_right_button.x + 10, self.page_right_button.y + 5), (self.page_right_button.x + 20, self.page_right_button.y + 15), (self.page_right_button.x + 10, self.page_right_button.y + 25)])
+
+# class Shop_Window(Item_Window):
+#     def __init__(self, x, y, width, height):
+#         super().__init__(x, y, width, height)
+#         self.title = "상점"
+#         self.title_surface = self.font.render(self.title, True, (0, 0, 0))
+#         self.title_rect = self.title_surface.get_rect()
+#         self.title_rect.topleft = (self.rect.x + 5, self.rect.y + 5)
 
 # web_crawler.py에서 가져온 공지사항 크롤러를 이용한 공지사항 창
 class STnotice_Window(Window):

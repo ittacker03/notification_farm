@@ -9,7 +9,7 @@ PLAYER_SPEED = 5
 BLOCK_WIDTH = 48
 BLOCK_HEIGHT = 48
 DEF_WINDOW_WIDTH = 400
-DEF_WINDOW_HEIGHT = 320
+DEF_WINDOW_HEIGHT = 350
 NOTI_WINDOW_WIDTH = 400
 NOTI_WINDOW_HEIGHT = 400
 
@@ -43,6 +43,8 @@ item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/gra
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
 item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
 item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)))
+for i in range(20):
+    item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
 
 # 블록 매니저 생성
 block_manager = blocks.load_blocks("block_data.json", window_manager, stnotice_window)
@@ -203,7 +205,7 @@ while running:
                     if w.quit.collidepoint(event.pos):
                         window_manager.remove_window(w)
                         break
-                # window : 클릭한 윈도우 안의 아이템 클릭 처리
+                # item window : 클릭한 윈도우 안의 아이템 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.Item_Window):
                         continue
@@ -214,7 +216,17 @@ while running:
                                 cur_block = item.copy()
                                 break
                         break
-                # window : 클릭한 윈도우 안의 공지 클릭 처리
+                # item window : 아이템 윈도우의 페이지 변경 버튼 클릭 처리
+                for w in reversed(window_manager.windows):
+                    if not isinstance(w, window.Item_Window):
+                        continue
+                    if w.page_left_button.collidepoint(event.pos):
+                        w.prev_page()
+                        break
+                    if w.page_right_button.collidepoint(event.pos):
+                        w.next_page()
+                        break
+                # notice window : 클릭한 윈도우 안의 공지 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.STnotice_Window):
                         break
@@ -226,7 +238,7 @@ while running:
                                 print(p1.get_noti_seed())
                                 break
                         break
-                # window : 공지 윈도우의 페이지 변경 버튼 클릭 처리
+                # notice window : 공지 윈도우의 페이지 변경 버튼 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.STnotice_Window):
                         break

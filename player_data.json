@@ -1,10 +1,10 @@
 {
     "type": "User",
-    "x": 647,
-    "y": 511,
+    "x": 602,
+    "y": 576,
     "width": 48,
     "height": 48,
     "image": "./pictures/char_down.png",
     "direction": "left",
-    "noti_seed": 50
+    "noti_seed": 55
 }

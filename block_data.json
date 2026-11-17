@@ -3,10 +3,50 @@
         {
             "type": "Block",
             "x": 624,
+            "y": 48,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 11,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 672,
+            "y": 48,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 11,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 624,
             "y": 96,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
+            "order": 10,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 576,
+            "y": 96,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 10,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 672,
+            "y": 96,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
             "order": 10,
             "layer": 0
         },
@@ -32,6 +72,26 @@
         },
         {
             "type": "Block",
+            "x": 528,
+            "y": 144,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 9,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 672,
+            "y": 144,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 9,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 624,
             "y": 192,
             "width": 48,
@@ -112,6 +172,16 @@
         },
         {
             "type": "Block",
+            "x": 960,
+            "y": 192,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 8,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 624,
             "y": 240,
             "width": 48,
@@ -157,6 +227,46 @@
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
+            "order": 7,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 528,
+            "y": 240,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 7,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 672,
+            "y": 240,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 7,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 960,
+            "y": 240,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 7,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
+            "y": 240,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/stone_block.png",
             "order": 7,
             "layer": 0
         },
@@ -237,6 +347,26 @@
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
+            "order": 6,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 528,
+            "y": 288,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 6,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 576,
+            "y": 288,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
             "order": 6,
             "layer": 0
         },
@@ -362,6 +492,16 @@
         },
         {
             "type": "Block",
+            "x": 720,
+            "y": 336,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 5,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 576,
             "y": 384,
             "width": 48,
@@ -552,6 +692,26 @@
         },
         {
             "type": "Block",
+            "x": 816,
+            "y": 432,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/stone_block.png",
+            "order": 3,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 864,
+            "y": 432,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 3,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 480,
             "y": 480,
             "width": 48,
@@ -632,6 +792,26 @@
         },
         {
             "type": "Block",
+            "x": 816,
+            "y": 480,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 2,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 864,
+            "y": 480,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 2,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 480,
             "y": 528,
             "width": 48,
@@ -702,6 +882,26 @@
         },
         {
             "type": "Block",
+            "x": 768,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 816,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 480,
             "y": 576,
             "width": 48,
@@ -762,6 +962,16 @@
         },
         {
             "type": "Block",
+            "x": 672,
+            "y": 576,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": 0,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 480,
             "y": 624,
             "width": 48,
@@ -788,6 +998,36 @@
             "height": 48,
             "image_path": "pictures/grass_block.png",
             "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 624,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 672,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 576,
+            "y": 672,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/wood_block.png",
+            "order": -2,
             "layer": 0
         }
     ]
