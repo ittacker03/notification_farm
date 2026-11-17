@@ -61,7 +61,7 @@ class BlockManager:
         for block in self.list:
             block.draw(surface)
 
-def save_blocks(block_manager, filename):
+def save_blocks(filename, block_manager):
     data = {"blocks": []}
 
     for block in block_manager.list:
@@ -110,5 +110,5 @@ def load_blocks(filename, window_manager, stnotice_window):
                     block_data["layer"]
                 )
         block_manager.add_block(block)
-        
+
     return block_manager
