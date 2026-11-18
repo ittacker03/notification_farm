@@ -81,7 +81,7 @@ def save_blocks(filename, block_manager):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-def load_blocks(filename, window_manager, stnotice_window):
+def load_blocks(filename, window_manager, stnotice_window, storeitem_window):
     with open(filename, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -110,6 +110,18 @@ def load_blocks(filename, window_manager, stnotice_window):
                     block_data["layer"],
                     lambda: window_manager.add_window(stnotice_window)
                 )
+            elif block_data["image_path"] == "pictures/store_block.png":
+                block = Method_Block(
+                    block_data["x"],
+                    block_data["y"],
+                    block_data["width"],
+                    block_data["height"],
+                    block_data["image_path"],
+                    block_data["order"],
+                    block_data["layer"],
+                    lambda: window_manager.add_window(storeitem_window)
+                )
+            
         block_manager.add_block(block)
 
     return block_manager

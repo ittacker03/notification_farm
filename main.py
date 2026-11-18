@@ -36,16 +36,19 @@ background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREE
 # 윈도우 매니저 생성
 window_manager = window.WindowManager()
 # 각 윈도우 생성
-item_window = window.Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
+storeitem_window = window.Store_Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
 useritem_window = window.User_Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
 stnotice_window = window.STnotice_Window(100, 100, NOTI_WINDOW_WIDTH, NOTI_WINDOW_HEIGHT)
 
-# item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"))
-# item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"))
-# item_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
-# item_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)))
+storeitem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"), 1)
+storeitem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"), 1)
+storeitem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"), 1)
+storeitem_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)), 0)
+
+window_manager.add_window(storeitem_window)
 # 블록 매니저 생성
-block_manager = blocks.load_blocks("block_data.json", window_manager, stnotice_window)
+block_manager = blocks.load_blocks("block_data.json", window_manager, stnotice_window, storeitem_window)
+# 플레이어가 들고 있는 블록
 cur_block = None
 
 
@@ -206,17 +209,6 @@ while running:
                     if w.quit.collidepoint(event.pos):
                         window_manager.remove_window(w)
                         break
-                # item window : 클릭한 윈도우 안의 아이템 클릭 처리
-                for w in reversed(window_manager.windows):
-                    if not isinstance(w, window.Item_Window):
-                        continue
-                    if w.rect.collidepoint(event.pos):
-                        for item in w.items:
-                            if item.rect.collidepoint(event.pos):
-                                # 객체를 복사하기
-                                cur_block = item.copy()
-                                break
-                        break
                 # item window : 아이템 윈도우의 페이지 변경 버튼 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.Item_Window):
@@ -227,6 +219,31 @@ while running:
                     if w.page_right_button.collidepoint(event.pos):
                         w.next_page()
                         break
+                # user item window : 클릭한 윈도우 안의 아이템 클릭 처리
+                for w in reversed(window_manager.windows):
+                    if not isinstance(w, window.User_Item_Window):
+                        continue
+                    if w.rect.collidepoint(event.pos):
+                        for item in w.items:
+                            if item.rect.collidepoint(event.pos):
+                                # 객체를 복사하기
+                                cur_block = item.copy()
+                                break
+                        break
+                # store item window : 클릭한 윈도우 안의 아이템 클릭 처리
+                for w in reversed(window_manager.windows):
+                    if not isinstance(w, window.Store_Item_Window):
+                        continue
+                    if w.rect.collidepoint(event.pos):
+                        for item in w.items:
+                            if item.rect.collidepoint(event.pos):
+                                if w.get_price(item) <= p1.get_noti_seed():
+                                    p1.subtract_noti_seed(w.get_price(item))
+                                    useritem_window.add_item(item.copy())
+                                break
+                        break
+                
+                
                 # notice window : 클릭한 윈도우 안의 공지 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.STnotice_Window):

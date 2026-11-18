@@ -177,7 +177,6 @@ class User_Item_Window(Item_Window):
         else:
             self.items_nums[item.image_path] = 1
             super().add_item(item)
-        print(self.items_nums)
     def remove_item(self, item):
         if item.image_path in self.items_nums:
             self.items_nums[item.image_path] -= 1
@@ -185,7 +184,6 @@ class User_Item_Window(Item_Window):
                 del self.items_nums[item.image_path]
                 super().remove_item(item)
                 return "removed"
-        print(self.items_nums)
     def draw(self, surface):
         super().draw(surface)
         for item in self.items:
@@ -196,6 +194,27 @@ class User_Item_Window(Item_Window):
                 text_rect = text_surface.get_rect()
                 text_rect.bottomright = item.rect.bottomright
                 surface.blit(text_surface, text_rect)
+
+class Store_Item_Window(Item_Window):
+    def __init__(self, x, y, width, height, title = "상점 아이템"):
+        super().__init__(x, y, width, height, title)
+        self.items_prices = {}
+    # 아이템의 image_path를 받아서 해당 아이템이 이미 존재하면 개수만 증가, 없으면 새로 추가
+    def add_item(self, item, price):
+        if item.image_path not in self.items_prices:
+            self.items_prices[item.image_path] = price
+            super().add_item(item)
+    def get_price(self, item):
+        return self.items_prices.get(item.image_path, 0)
+    def draw(self, surface):
+        super().draw(surface)
+        for item in self.items:
+            price = self.items_prices.get(item.image_path, 0)
+            font = pygame.font.Font("./font/NanumGothic.ttf", 20)
+            text_surface = font.render(str(price), True, (0, 0, 0))
+            text_rect = text_surface.get_rect()
+            text_rect.bottomright = item.rect.bottomright
+            surface.blit(text_surface, text_rect)
 
 class STnotice_Window(Window):
     def __init__(self, x, y, width, height):
@@ -292,90 +311,3 @@ class WindowManager:
             self.move_windows(window, dx + extra_x, dy + extra_y)
             extra_x += 5
             extra_y -= 5
-
-WINDOW_WIDTH = 400
-WINDOW_HEIGHT = 320
-
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    clock = pygame.time.Clock()
-
-    window_manager = WindowManager()
-    item_window = Item_Window(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
-    
-    for i in range(20):
-        grass_block = blocks.Block(200, 200, 48, 48, "pictures/grass_block.png")
-        stone_block = blocks.Block(200, 200, 48, 48, "pictures/stone_block.png")
-        item_window.add_item(grass_block)
-        item_window.add_item(stone_block)
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            # 마우스가 눌렸을 때
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # 좌클릭
-                if event.button == 1:
-                    # 클릭한 윈도우를 가장 위로 올리기
-                    for window in reversed(window_manager.windows):
-                        if window.rect.collidepoint(event.pos):
-                            window_manager.remove_window(window)
-                            window_manager.add_window(window)
-                            break
-                    # 종료 버튼 클릭 이벤트 처리
-                    for window in reversed(window_manager.windows):
-                        if window.quit.collidepoint(event.pos):
-                            window_manager.remove_window(window)
-                            break
-                    # 클릭한 윈도우 안의 아이템 클릭 처리
-                    for window in reversed(window_manager.windows):
-                        if not isinstance(window, Item_Window):
-                            continue
-                        if window.rect.collidepoint(event.pos):
-                            for item in window.items:
-                                if item.rect.collidepoint(event.pos):
-                                    print(f"Item clicked: {item.image_path}")
-                                    break
-                            break
-                # 우클릭: 새로운 윈도우 생성
-                elif event.button == 3:
-                    new_window = Window(event.pos[0] - WINDOW_WIDTH // 2, event.pos[1] - WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT)
-                    window_manager.add_window(new_window)
-            # 좌클릭하고 드래그하면 윈도우 이동
-            elif event.type == pygame.MOUSEMOTION and event.buttons[0]:
-                for window in reversed(window_manager.windows):
-                    if window.rect.collidepoint(event.pos):
-                        for element in window.elements:
-                            for sub_element in element:
-                                sub_element.x += event.rel[0]
-                                sub_element.y += event.rel[1]
-                        break
-            # m 누르면 창 모두 화면 중앙에 위치
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-                window_manager.center_windows(screen.get_width(), screen.get_height())
-                break
-            # b 누르면 item_window window_manager에 추가
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
-                window_manager.add_window(item_window)
-                # item_window의 items 출력
-                print("Current items in item_window:")
-                for i, item in enumerate(item_window.items):
-                    print(f"Item {i}: {item.image_path}")
-                break
-            # w 누르면 window_manager의 windows 출력
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_w:
-                print("Current windows:")
-                for i, window in enumerate(window_manager.windows):
-                    print(f"Window {i}: {window}")
-                break
-
-        # 배경색을 파란색으로 설정
-        screen.fill((0, 0, 255))
-        # 모든 윈도우 띄우기
-        window_manager.draw_windows(screen)
-        pygame.display.update()
-        clock.tick(60)
-    pygame.quit()
