@@ -2,643 +2,267 @@
     "blocks": [
         {
             "type": "Block",
-            "x": 624,
-            "y": 288,
+            "x": 960,
+            "y": 432,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 6,
+            "order": 3,
             "layer": 0
         },
         {
             "type": "Block",
-            "x": 672,
-            "y": 288,
+            "x": 912,
+            "y": 432,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 6,
+            "order": 3,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 816,
-            "y": 288,
+            "y": 432,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 6,
+            "order": 3,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 768,
-            "y": 288,
+            "y": 432,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 6,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 288,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 6,
+            "order": 3,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 864,
-            "y": 288,
+            "y": 432,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 6,
+            "order": 3,
             "layer": 0
         },
         {
             "type": "Block",
-            "x": 576,
-            "y": 288,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": 6,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 336,
+            "x": 960,
+            "y": 480,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 5,
+            "order": 2,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 864,
-            "y": 336,
+            "y": 480,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 5,
+            "order": 2,
             "layer": 0
         },
         {
             "type": "Block",
-            "x": 720,
-            "y": 336,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": 5,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 384,
+            "x": 912,
+            "y": 480,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 4,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 384,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 4,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 384,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 4,
+            "order": 2,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 768,
-            "y": 384,
+            "y": 480,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 4,
+            "order": 2,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 816,
-            "y": 384,
+            "y": 480,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 4,
+            "order": 2,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 912,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 816,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 960,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
+            "y": 576,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 0,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 864,
-            "y": 384,
+            "y": 576,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": 4,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 384,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 4,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 432,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 3,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 432,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 3,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 432,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 3,
+            "order": 0,
             "layer": 0
         },
         {
             "type": "Block",
             "x": 816,
-            "y": 432,
+            "y": 576,
             "width": 48,
             "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 3,
+            "image_path": "pictures/grass_block.png",
+            "order": 0,
             "layer": 0
         },
+        {
+            "type": "Block",
+            "x": 912,
+            "y": 576,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 0,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 960,
+            "y": 576,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 0,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 912,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 816,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 960,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 960,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 864,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        }
+    ],
+    "method_blocks": [
         {
             "type": "Method_Block",
             "x": 864,
-            "y": 432,
+            "y": 528,
             "width": 48,
             "height": 48,
             "image_path": "pictures/store_block.png",
-            "order": 3,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 432,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 3,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 432,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 3,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 864,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Method_Block",
-            "x": 864,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
             "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Method_Block",
-            "x": 816,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 864,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Method_Block",
-            "x": 768,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 576,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 864,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 624,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
-            "y": 672,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/wood_block.png",
-            "order": -2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 672,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 672,
-            "y": 672,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/stone_block.png",
-            "order": -2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 720,
-            "y": 672,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": -2,
-            "layer": 0
-        },
-        {
-            "type": "Method_Block",
-            "x": 624,
-            "y": 672,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
-            "order": -2,
-            "layer": 0
-        },
-        {
-            "type": "Method_Block",
-            "x": 576,
-            "y": 672,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
-            "order": -2,
-            "layer": 0
-        },
-        {
-            "type": "Method_Block",
-            "x": 864,
-            "y": 720,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
-            "order": -3,
-            "layer": 0
+            "layer": 0,
+            "auto": false,
+            "delay": 3000
         }
     ]
 }

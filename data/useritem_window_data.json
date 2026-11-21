@@ -1,15 +1,4 @@
 {
-    "items": [
-        {
-            "type": "Method_Block",
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/noti_block.png",
-            "order": 0,
-            "layer": 0
-        }
-    ],
-    "items_nums": {
-        "pictures/noti_block.png": 3
-    }
+    "items": [],
+    "items_nums": {}
 }
