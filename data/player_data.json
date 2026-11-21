@@ -1,9 +1,9 @@
 {
     "type": "Player",
-    "x": 928,
-    "y": 392,
+    "x": 793,
+    "y": 607,
     "width": 48,
     "height": 48,
     "image": "./pictures/char_down.png",
-    "direction": "up"
+    "direction": "left"
 }

@@ -212,7 +212,7 @@ while running:
                     grid_rect = pygame.Rect(round(player__.rect.x / BLOCK_WIDTH) * BLOCK_WIDTH, round(player__.rect.y / BLOCK_HEIGHT) * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT)
                     if block.rect.colliderect(grid_rect):
                         if isinstance(block, blocks.Method_Block):
-                            print(f"Method Block Info: x={block.rect.x}, y={block.rect.y}, width={block.rect.width}, height={block.rect.height}, image_path={block.image_path}, order={block.order}, layer={block.layer}, method={block.method}, auto={block.auto}, delay={block.delay}")
+                            print(f"Method Block Info: x={block.rect.x}, y={block.rect.y}, width={block.rect.width}, height={block.rect.height}, image_path={block.image_path}, order={block.order}, layer={block.layer}, method={block.method.__name__}, auto={block.auto}, delay={block.delay}, created_time={block.created_at}")
                         else:
                             print(f"Block Info: x={block.rect.x}, y={block.rect.y}, width={block.rect.width}, height={block.rect.height}, image_path={block.image_path}, order={block.order}, layer={block.layer}")
                             break

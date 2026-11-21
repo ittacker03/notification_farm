@@ -130,67 +130,33 @@ def load_blocks(filename, window_manager, stnotice_window, storeitem_window):
         block_manager.add_block(block)
 
     for method_block_data in data["method_blocks"]:
+        block = Method_Block(
+            method_block_data["x"],
+            method_block_data["y"],
+            method_block_data["width"],
+            method_block_data["height"],
+            method_block_data["image_path"],
+            method_block_data["order"],
+            method_block_data["layer"],
+            method=None,
+            auto=method_block_data["auto"],
+            delay=method_block_data["delay"]
+        )
+
+
         if method_block_data["image_path"] == "pictures/noti_block.png":
-            block = Method_Block(
-                method_block_data["x"],
-                method_block_data["y"],
-                method_block_data["width"],
-                method_block_data["height"],
-                method_block_data["image_path"],
-                method_block_data["order"],
-                method_block_data["layer"],
-                lambda: window_manager.add_window(stnotice_window)
-            )
+            block.method =lambda: window_manager.add_window(stnotice_window)
+        
         elif method_block_data["image_path"] == "pictures/store_block.png":
-            block = Method_Block(
-                method_block_data["x"],
-                method_block_data["y"],
-                method_block_data["width"],
-                method_block_data["height"],
-                method_block_data["image_path"],
-                method_block_data["order"],
-                method_block_data["layer"],
-                lambda: window_manager.add_window(storeitem_window)
-            )
+            block.method = lambda: window_manager.add_window(storeitem_window)
+            
         elif method_block_data["image_path"] == "pictures/noti_seed_planted.png":
-            block = Method_Block(
-                method_block_data["x"],
-                method_block_data["y"],
-                method_block_data["width"],
-                method_block_data["height"],
-                method_block_data["image_path"],
-                method_block_data["order"],
-                method_block_data["layer"],
-                lambda: planted2growing(block, block_manager),
-                method_block_data["auto"],
-                method_block_data["delay"]
-            )
+            block.method = lambda b=block: planted2growing(b, block_manager)
         elif method_block_data["image_path"] == "pictures/noti_seed_growing.png":
-            block = Method_Block(
-                method_block_data["x"],
-                method_block_data["y"],
-                method_block_data["width"],
-                method_block_data["height"],
-                method_block_data["image_path"],
-                method_block_data["order"],
-                method_block_data["layer"],
-                lambda: growing2grown(block, block_manager),
-                method_block_data["auto"],
-                method_block_data["delay"]
-            )
+            block.method = lambda b=block: growing2grown(b, block_manager)
         elif method_block_data["image_path"] == "pictures/noti_seed_grown.png":
-            block = Method_Block(
-                method_block_data["x"],
-                method_block_data["y"],
-                method_block_data["width"],
-                method_block_data["height"],
-                method_block_data["image_path"],
-                method_block_data["order"],
-                method_block_data["layer"],
-                lambda: grown2grass(block, block_manager),
-                method_block_data["auto"],
-                method_block_data["delay"]
-            )
+            block.method = lambda b=block: grown2grass(b, block_manager)
+        
         block_manager.add_block(block)
         block_manager.sort_blocks()
 
@@ -208,13 +174,16 @@ def grown2grass(grown, block_manager):
     replace_block(grown, grass, block_manager)
 
 def growing2grown(growing, block_manager):
-    grown = Method_Block(growing.rect.x, growing.rect.y, growing.rect.width, growing.rect.height, "pictures/noti_seed_grown.png", growing.order, growing.layer, method=lambda: grown2grass(grown, block_manager))
+    grown = Method_Block(growing.rect.x, growing.rect.y, growing.rect.width, growing.rect.height, "pictures/noti_seed_grown.png", growing.order, growing.layer, method=None)
+    grown.method = lambda old=grown: grown2grass(old, block_manager)
     replace_block(growing, grown, block_manager)
 
 def planted2growing(planted, block_manager):
-    growing = Method_Block(planted.rect.x, planted.rect.y, planted.rect.width, planted.rect.height, "pictures/noti_seed_growing.png", planted.order, planted.layer, method=lambda: growing2grown(growing, block_manager), auto=True, delay=3000)
+    growing = Method_Block(planted.rect.x, planted.rect.y, planted.rect.width, planted.rect.height, "pictures/noti_seed_growing.png", planted.order, planted.layer, method=None, auto=True, delay=3000)
+    growing.method = lambda old=growing: growing2grown(old, block_manager)
     replace_block(planted, growing, block_manager)
 
 def grass2planted(grass, block_manager):
-    planted = Method_Block(grass.rect.x, grass.rect.y, grass.rect.width, grass.rect.height, "pictures/noti_seed_planted.png", grass.order, grass.layer, method=lambda: planted2growing(planted, block_manager), auto=True, delay=3000)
+    planted = Method_Block(grass.rect.x, grass.rect.y, grass.rect.width, grass.rect.height, "pictures/noti_seed_planted.png", grass.order, grass.layer, method=None, auto=True, delay=3000)
+    planted.method = lambda old=planted: planted2growing(old, block_manager)
     replace_block(grass, planted, block_manager)

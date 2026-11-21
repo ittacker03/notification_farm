@@ -12,7 +12,7 @@
         },
         {
             "type": "Block",
-            "x": 912,
+            "x": 768,
             "y": 432,
             "width": 48,
             "height": 48,
@@ -32,7 +32,7 @@
         },
         {
             "type": "Block",
-            "x": 768,
+            "x": 864,
             "y": 432,
             "width": 48,
             "height": 48,
@@ -42,12 +42,32 @@
         },
         {
             "type": "Block",
-            "x": 864,
+            "x": 912,
             "y": 432,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
             "order": 3,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 912,
+            "y": 480,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 2,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
+            "y": 480,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 2,
             "layer": 0
         },
         {
@@ -62,6 +82,16 @@
         },
         {
             "type": "Block",
+            "x": 816,
+            "y": 480,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 2,
+            "layer": 0
+        },
+        {
+            "type": "Block",
             "x": 864,
             "y": 480,
             "width": 48,
@@ -73,46 +103,6 @@
         {
             "type": "Block",
             "x": 912,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 768,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
-            "y": 480,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 2,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 912,
-            "y": 528,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 816,
             "y": 528,
             "width": 48,
             "height": 48,
@@ -142,27 +132,17 @@
         },
         {
             "type": "Block",
-            "x": 768,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 864,
-            "y": 576,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": 0,
-            "layer": 0
-        },
-        {
-            "type": "Block",
             "x": 816,
+            "y": 528,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
             "y": 576,
             "width": 48,
             "height": 48,
@@ -192,17 +172,27 @@
         },
         {
             "type": "Block",
-            "x": 912,
-            "y": 624,
+            "x": 816,
+            "y": 576,
             "width": 48,
             "height": 48,
             "image_path": "pictures/grass_block.png",
-            "order": -1,
+            "order": 0,
             "layer": 0
         },
         {
             "type": "Block",
-            "x": 768,
+            "x": 864,
+            "y": 576,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": 0,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 816,
             "y": 624,
             "width": 48,
             "height": 48,
@@ -222,17 +212,7 @@
         },
         {
             "type": "Block",
-            "x": 960,
-            "y": 624,
-            "width": 48,
-            "height": 48,
-            "image_path": "pictures/grass_block.png",
-            "order": -1,
-            "layer": 0
-        },
-        {
-            "type": "Block",
-            "x": 960,
+            "x": 816,
             "y": 624,
             "width": 48,
             "height": 48,
@@ -243,6 +223,46 @@
         {
             "type": "Block",
             "x": 864,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 864,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 960,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 768,
+            "y": 624,
+            "width": 48,
+            "height": 48,
+            "image_path": "pictures/grass_block.png",
+            "order": -1,
+            "layer": 0
+        },
+        {
+            "type": "Block",
+            "x": 912,
             "y": 624,
             "width": 48,
             "height": 48,
