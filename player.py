@@ -55,6 +55,8 @@ def load_player(filename):
     with open(filename, "r") as f:
         data = json.load(f)
     if data["type"] == "User":
+        if data.get("noti_seed") is None:
+            data["noti_seed"] = 0
         player = User(data["x"], data["y"], data["width"], data["height"], data.get("image", ""), data.get("direction", "down"), data["noti_seed"])
     else:
         player = Player(data["x"], data["y"], data["width"], data["height"], data.get("image", ""), data.get("direction", "down"))

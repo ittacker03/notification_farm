@@ -1,6 +1,7 @@
 import pygame
 import blocks
 import web_crawler
+import json
 
 # 화면에 띄우는 창을 나타내는 클래스
 class Window:
@@ -166,6 +167,16 @@ class Item_Window(Window):
         pygame.draw.polygon(surface, (0, 0, 0), [(self.page_left_button.x + 20, self.page_left_button.y + 5), (self.page_left_button.x + 10, self.page_left_button.y + 15), (self.page_left_button.x + 20, self.page_left_button.y + 25)])
         pygame.draw.polygon(surface, (0, 0, 0), [(self.page_right_button.x + 10, self.page_right_button.y + 5), (self.page_right_button.x + 20, self.page_right_button.y + 15), (self.page_right_button.x + 10, self.page_right_button.y + 25)])
 
+        # 페이지 번호 표시
+        tot_pages = 1 if len(self.pages) == 0 else len(self.pages)
+
+        font = pygame.font.Font("./font/NanumGothic.ttf", 20)
+        page_text = f"{self.cur_page}/{tot_pages}"
+        text_surface = font.render(page_text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect()
+        text_rect.center = (self.rect.x + self.rect.width - 25, self.rect.y + self.rect.height - 25)
+        surface.blit(text_surface, text_rect)
+        
 class User_Item_Window(Item_Window):
     def __init__(self, x, y, width, height, title = "사용자 아이템"):
         super().__init__(x, y, width, height, title)
@@ -311,3 +322,72 @@ class WindowManager:
             self.move_windows(window, dx + extra_x, dy + extra_y)
             extra_x += 5
             extra_y -= 5
+
+def save_useritem_windows(filename, useritem_window):
+    data = {
+        "items": [],
+        "items_nums": useritem_window.items_nums
+    }
+
+    for item in useritem_window.items:
+        item_data = {
+            "type": type(item).__name__,
+            "width": item.rect.width,
+            "height": item.rect.height,
+            "image_path": item.image_path,
+            "order": item.order,
+            "layer": item.layer
+        }
+        data["items"].append(item_data)
+
+    with open(filename, "w") as f:
+        f.write(json.dumps(data, indent=4))
+
+
+def load_useritem_windows(filename, x, y, width, height, window_manager, stnotice_window, storeitem_window):
+    with open(filename, "r") as f:
+        data = json.load(f)
+
+    useritem_window = User_Item_Window(x, y, width, height)
+
+    for item_data in data["items"]:
+        if item_data["type"] == "Block":
+            useritem_window.add_item(blocks.Block(
+                0, 0,
+                item_data["width"],
+                item_data["height"],
+                item_data["image_path"],
+                item_data["order"],
+                item_data["layer"]
+            ))
+        elif item_data["type"] == "Method_Block":
+            if item_data["image_path"] == "pictures/noti_block.png":
+                useritem_window.add_item(blocks.Method_Block(
+                    0, 0,
+                    item_data["width"],
+                    item_data["height"],
+                    item_data["image_path"],
+                    item_data["order"],
+                    item_data["layer"],
+                    lambda: window_manager.add_window(stnotice_window)
+                ))
+            elif item_data["image_path"] == "pictures/store_block.png":
+                useritem_window.add_item(blocks.Method_Block(
+                    0, 0,
+                    item_data["width"],
+                    item_data["height"],
+                    item_data["image_path"],
+                    item_data["order"],
+                    item_data["layer"],
+                    lambda: window_manager.add_window(storeitem_window)
+                ))
+
+    for key, value in data["items_nums"].items():
+            useritem_window.items_nums[key] = value
+
+    return useritem_window
+
+
+
+
+

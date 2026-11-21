@@ -26,57 +26,54 @@ pygame.display.set_caption("Notification Farm")
 clock = pygame.time.Clock()
 # 플레이어 설정
 try:
-    p1 = player.load_player("player_data.json")
+    player__ = player.load_player("./data/player_data.json")
 except (FileNotFoundError, json.JSONDecodeError):
-    p1 = player.User(100, 100, 48, 48, "./pictures/char_down.png", noti_seed=0)
+    player__ = player.User(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 48, 48, "./pictures/char_down.png", noti_seed=0)
 # 백그라운드 이미지 설정
-background_image = pygame.image.load("pictures/sky.jpg")
+background_image = pygame.image.load("./pictures/sky.jpg")
 # 백그라운드 이미지 크기 전체화면에 맞게 조정
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 # 윈도우 매니저 생성
 window_manager = window.WindowManager()
 # 각 윈도우 생성
 storeitem_window = window.Store_Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
-useritem_window = window.User_Item_Window(100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT)
 stnotice_window = window.STnotice_Window(100, 100, NOTI_WINDOW_WIDTH, NOTI_WINDOW_HEIGHT)
-
 storeitem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/grass_block.png"), 1)
 storeitem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/stone_block.png"), 1)
 storeitem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"), 1)
 storeitem_window.add_item(blocks.Method_Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/noti_block.png", method=lambda: window_manager.add_window(stnotice_window)), 0)
+useritem_window = window.load_useritem_windows("./data/useritem_window_data.json", 100, 100, DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT, window_manager, stnotice_window, storeitem_window)
 
-window_manager.add_window(storeitem_window)
 # 블록 매니저 생성
-block_manager = blocks.load_blocks("block_data.json", window_manager, stnotice_window, storeitem_window)
+block_manager = blocks.load_blocks("./data/block_data.json", window_manager, stnotice_window, storeitem_window)
 # 플레이어가 들고 있는 블록
 cur_block = None
 
-
-# 게임이 동작하는 동안 이벤트
-x = 0
-y = 0
+# Running the main loop
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            player.save_player("player_data.json", p1)
-            blocks.save_blocks("block_data.json", block_manager)
+            player.save_player("./data/player_data.json", player__)
+            blocks.save_blocks("./data/block_data.json", block_manager)
+            window.save_useritem_windows("./data/useritem_window_data.json", useritem_window)
             running = False
+
         elif event.type == pygame.VIDEORESIZE:
             # 창 크기 조절 이벤트 처리
             display = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             SCREEN_WIDTH, SCREEN_HEIGHT = display.get_size()
             # 백그라운드 이미지 화면크기에 맞게 조정
             background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        # Event Type : KEYDOWN
+        
         elif event.type == pygame.KEYDOWN:
             # block : 스페이스바를 누르면 플레이어 위치를 블록 크기의 격자에 맞춘 후, 가장 가까운 블록을 기준으로 새 블록을 생성
             if event.key == pygame.K_SPACE:
                 if cur_block is None:
                     continue
                 # 플레이어 위치를 블록 크기의 격자에 맞춘다.
-                grid_x = round(p1.rect.x / BLOCK_WIDTH) * BLOCK_WIDTH
-                grid_y = round(p1.rect.y / BLOCK_HEIGHT) * BLOCK_HEIGHT
+                grid_x = round(player__.rect.x / BLOCK_WIDTH) * BLOCK_WIDTH
+                grid_y = round(player__.rect.y / BLOCK_HEIGHT) * BLOCK_HEIGHT
 
                 # 같은 열에 있는 가장 가까운 위/아래 블록을 찾는다.
                 grid_rect = pygame.Rect(grid_x, grid_y, BLOCK_WIDTH, BLOCK_HEIGHT)
@@ -168,29 +165,33 @@ while running:
 
                     block_state = useritem_window.remove_item(cur_block)
                     if block_state == "removed":
-                        print("아이템 창에서 아이템 제거됨")
                         cur_block = None
             # block : r 누르면 플레이어 위치에 있는 블록 제거
             elif event.key == pygame.K_r:
                 for block in block_manager.list:
-                    if block.rect.colliderect(p1.rect):
+                    if block.rect.colliderect(player__.rect):
                         block_manager.remove_block(block)
                         break
-            # window : i 누르면 사용자 아이템 창 화면에 출력
+            # user item window : i 누르면 사용자 아이템 창 화면에 출력
             elif event.key == pygame.K_i:
                 window_manager.add_window(useritem_window)
-            # window : t 누르면 useritem 창에 wood block 추가
-            elif event.key == pygame.K_t:
-                useritem_window.add_item(blocks.Block(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, "pictures/wood_block.png"))
             # window : m 누르면 창 모두 화면 중앙에 위치
             elif event.key == pygame.K_m:
                 window_manager.center_windows(SCREEN_WIDTH, SCREEN_HEIGHT)
-        # Event Type : MOUSEBUTTONDOWN
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 event_happend = False
-                # blocks : 블록 클릭 이벤트 처리
+                # method block : 클릭 이벤트 처리
                 for block in block_manager.list:
+                    # 클릭한 블록이 윈도우 위에 있는지 확인
+                    is_window_above = False
+                    for w in window_manager.windows:
+                        if w.rect.collidepoint(event.pos):
+                            is_window_above = True
+                            break
+                    if is_window_above:
+                        continue
                     if block.rect.collidepoint(event.pos):
                         if isinstance(block, blocks.Method_Block):
                             block.execute_method()
@@ -198,6 +199,7 @@ while running:
                         break
                 if event_happend:
                     break
+                
                 # window : 클릭한 윈도우를 가장 위로 올리기
                 for w in reversed(window_manager.windows):
                     if w.rect.collidepoint(event.pos):
@@ -232,19 +234,18 @@ while running:
                         break
                 # store item window : 클릭한 윈도우 안의 아이템 클릭 처리
                 for w in reversed(window_manager.windows):
-                    if not isinstance(w, window.Store_Item_Window):
+                    if not isinstance(w, window.Store_Item_Window) or not isinstance(player__, player.User):
                         continue
                     if w.rect.collidepoint(event.pos):
                         for item in w.items:
                             if item.rect.collidepoint(event.pos):
-                                if w.get_price(item) <= p1.get_noti_seed():
-                                    p1.subtract_noti_seed(w.get_price(item))
+                                if w.get_price(item) <= player__.get_noti_seed():
+                                    player__.subtract_noti_seed(w.get_price(item))
                                     useritem_window.add_item(item.copy())
                                 break
                         break
                 
-                
-                # notice window : 클릭한 윈도우 안의 공지 클릭 처리
+                # stnotice window : 학사공지 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.STnotice_Window):
                         break
@@ -252,11 +253,11 @@ while running:
                         for notice, notice_rect in zip(w.notices, w.notice_rects):
                             if notice_rect.collidepoint(event.pos):
                                 webbrowser.open(notice['url'])
-                                p1.add_noti_seed(5)
-                                print(p1.get_noti_seed())
+                                if isinstance(player__, player.User):
+                                    player__.add_noti_seed(5)
                                 break
                         break
-                # notice window : 공지 윈도우의 페이지 변경 버튼 클릭 처리
+                # stnotice window : 페이지 변경 버튼 클릭 처리
                 for w in reversed(window_manager.windows):
                     if not isinstance(w, window.STnotice_Window):
                         break
@@ -266,7 +267,7 @@ while running:
                     if w.page_right_button.collidepoint(event.pos):
                         w.page_right()
                         break
-        # Event Type : MOUSEMOTION
+
         elif event.type == pygame.MOUSEMOTION:
             # window : 좌클릭하고 드래그하면 윈도우 이동
             if event.buttons[0]:
@@ -278,12 +279,12 @@ while running:
                                 sub_element.y += event.rel[1]
                         break
     # 플레이어 이동 키보드 입력 처리
-    if isinstance(p1, player.User):
+    if isinstance(player__, player.User):
         keys = pygame.key.get_pressed()
 
         # 이동 후 플레이어의 발밑 검사
         def can_move(dx, dy):
-            next_rect = p1.rect.copy()
+            next_rect = player__.rect.copy()
             next_rect.x += dx
             next_rect.y += dy
 
@@ -300,36 +301,36 @@ while running:
                 for block in block_manager.list
             )
 
-        if keys[pygame.K_w] and p1.rect.top > 0 and can_move(0, -PLAYER_SPEED):
-            p1.direction = "up"
-            p1.rect.y -= PLAYER_SPEED
+        if keys[pygame.K_w] and player__.rect.top > 0 and can_move(0, -PLAYER_SPEED):
+            player__.direction = "up"
+            player__.rect.y -= PLAYER_SPEED
 
-        if keys[pygame.K_a] and p1.rect.left > 0 and can_move(-PLAYER_SPEED, 0):
-            p1.direction = "left"
-            p1.rect.x -= PLAYER_SPEED
+        if keys[pygame.K_a] and player__.rect.left > 0 and can_move(-PLAYER_SPEED, 0):
+            player__.direction = "left"
+            player__.rect.x -= PLAYER_SPEED
 
-        if keys[pygame.K_s] and p1.rect.bottom < SCREEN_HEIGHT and can_move(0, PLAYER_SPEED):
-            p1.direction = "down"
-            p1.rect.y += PLAYER_SPEED
+        if keys[pygame.K_s] and player__.rect.bottom < SCREEN_HEIGHT and can_move(0, PLAYER_SPEED):
+            player__.direction = "down"
+            player__.rect.y += PLAYER_SPEED
 
-        if keys[pygame.K_d] and p1.rect.right < SCREEN_WIDTH and can_move(PLAYER_SPEED, 0):
-            p1.direction = "right"
-            p1.rect.x += PLAYER_SPEED
+        if keys[pygame.K_d] and player__.rect.right < SCREEN_WIDTH and can_move(PLAYER_SPEED, 0):
+            player__.direction = "right"
+            player__.rect.x += PLAYER_SPEED
 
     else:
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w] and p1.rect.top > 0:
-            p1.direction = "up"
-            p1.rect.y -= PLAYER_SPEED
-        if keys[pygame.K_a] and p1.rect.left > 0:
-            p1.direction = "left"
-            p1.rect.x -= PLAYER_SPEED
-        if keys[pygame.K_s] and p1.rect.bottom < SCREEN_HEIGHT:
-            p1.direction = "down"
-            p1.rect.y += PLAYER_SPEED
-        if keys[pygame.K_d] and p1.rect.right < SCREEN_WIDTH:
-            p1.direction = "right"
-            p1.rect.x += PLAYER_SPEED
+        if keys[pygame.K_w] and player__.rect.top > 0:
+            player__.direction = "up"
+            player__.rect.y -= PLAYER_SPEED
+        if keys[pygame.K_a] and player__.rect.left > 0:
+            player__.direction = "left"
+            player__.rect.x -= PLAYER_SPEED
+        if keys[pygame.K_s] and player__.rect.bottom < SCREEN_HEIGHT:
+            player__.direction = "down"
+            player__.rect.y += PLAYER_SPEED
+        if keys[pygame.K_d] and player__.rect.right < SCREEN_WIDTH:
+            player__.direction = "right"
+            player__.rect.x += PLAYER_SPEED
     
 
     # display에 백그라운드 이미지 그리기
@@ -337,11 +338,17 @@ while running:
     # 블록 리스트를 순회하며 블록 그리기
     block_manager.draw_blocks(display)
     # 플레이어 이미지 그리기
-    p1.draw(display)
+    player__.draw(display)
     # 플레이어의 위치를 블록 크기의 격자에 맞춘 사각형 그리기
-    grid_rect = pygame.Rect(round(p1.rect.x / BLOCK_WIDTH) * BLOCK_WIDTH, round(p1.rect.y / BLOCK_HEIGHT) * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT)
-
+    grid_rect = pygame.Rect(round(player__.rect.x / BLOCK_WIDTH) * BLOCK_WIDTH, round(player__.rect.y / BLOCK_HEIGHT) * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT)
     pygame.draw.rect(display, (255, 0, 0), grid_rect, 2)
+    # User의 noti_seed 표시
+    if isinstance(player__, player.User):
+        font = pygame.font.Font("./font/NanumGothic.ttf", 20)
+        noti_seed_text = f"Noti Seed: {player__.get_noti_seed()}"
+        text_surface = font.render(noti_seed_text, True, (0, 0, 0))
+        display.blit(text_surface, (10, 10))
+
     # 윈도우 매니저에 있는 모든 윈도우 그리기
     window_manager.draw_windows(display)
     # 디스플레이 업데이트
